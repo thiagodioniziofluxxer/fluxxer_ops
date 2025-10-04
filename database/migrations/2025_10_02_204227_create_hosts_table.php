@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('hosts', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('ip');
+            $table->json('credentials');
             $table->timestamps();
         });
     }

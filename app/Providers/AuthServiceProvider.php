@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Client;
 use App\Models\Permission;
 use App\Models\User;
+use App\Policies\ClientPolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -17,6 +19,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         User::class => UserPolicy::class,
+        Client::class => ClientPolicy::class,
     ];
 
     /**
@@ -25,14 +28,5 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerPolicies();
-        $permissions = Permission::all();
-
-        // Every permission may have multiple roles assigned
-        foreach ($permissions as $permission) {
-            Gate::define($permission->slug, function ($user) use ($permission) {
-                dd($user);
-                return $user->hasPermission($permission->slug);
-            });
-        }
     }
 }
